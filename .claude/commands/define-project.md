@@ -8,6 +8,16 @@ Analyze and document project requirements, architecture, and technical specifica
 /define-project [project-name]
 ```
 
+## Workflow Context
+
+This command is typically run AFTER cloning the template and BEFORE `/new-project`:
+
+```
+1. git clone claude-code-template my-app && cd my-app
+2. /define-project my-app    ← YOU ARE HERE
+3. /new-project my-app       ← Creates new repo with docs + code
+```
+
 ## Instructions for Claude
 
 When the user runs this command, activate the **requirements-architect** skill and follow its process:

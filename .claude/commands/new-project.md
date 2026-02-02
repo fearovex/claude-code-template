@@ -8,13 +8,42 @@ Create a new project from the claude-code-template.
 /new-project [project-name]
 ```
 
+## Workflow Context
+
+This command is typically run AFTER `/define-project`:
+
+```
+1. git clone claude-code-template my-app && cd my-app
+2. /define-project my-app    ← Creates requirements docs
+3. /new-project my-app       ← YOU ARE HERE (creates new repo)
+```
+
 ## Instructions for Claude
 
 When the user runs this command, follow these steps:
 
+### Step 0: Check for Existing Requirements
+
+First, check if `docs/requirements/` exists:
+
+```bash
+# Check if requirements were already defined
+ls docs/requirements/*.md 2>/dev/null
+```
+
+**If docs exist:**
+- Read `docs/requirements/PRD-*.md` to get project info
+- Read `docs/architecture/TSD-*.md` to get tech stack
+- Skip questions that are already answered
+- Confirm with user: "I found existing requirements. Use these? [Y/n]"
+
+**If docs don't exist:**
+- Suggest running `/define-project` first, OR
+- Proceed with quick setup (minimal questions)
+
 ### Step 1: Gather Project Information
 
-Ask the user for:
+Ask the user for (skip if already in docs):
 
 1. **Project name** (if not provided as argument)
 2. **Project description** (1-2 sentences)
@@ -33,12 +62,28 @@ Ask the user for:
 
 4. **GitHub repository** - Ask if they want to create a new repo or use existing
 
-### Step 2: Create Project Directory
+### Step 2: Prepare for New Repository
+
+**IMPORTANT**: This creates a NEW repository, NOT a branch of the template.
 
 ```bash
+# If we're inside the cloned template, remove template's git history
+rm -rf .git
+
+# Backup docs/ if it exists (from /define-project)
+if [ -d "docs" ]; then
+  mv docs docs_backup
+fi
+
+# Initialize fresh git repository
+git init
+```
+
+**If running from scratch (not inside template):**
+```bash
 # Clone template to new directory
-git clone https://github.com/fearovex/claude-code-template.git {{PROJECT_PATH}}
-cd {{PROJECT_PATH}}
+git clone https://github.com/fearovex/claude-code-template.git {{PROJECT_NAME}}
+cd {{PROJECT_NAME}}
 
 # Remove template git history
 rm -rf .git
@@ -97,50 +142,89 @@ npx nuxi@latest init .
 4. Update the Development Commands section with actual commands from package.json or equivalent
 5. Remove the "Getting Started (For Claude)" section (no longer needed)
 
-### Step 5: Create GitHub Repository (if requested)
+### Step 5: Restore Documentation
+
+If docs were backed up from `/define-project`:
 
 ```bash
-# Create repo via API
+# Restore docs folder
+if [ -d "docs_backup" ]; then
+  mv docs_backup docs
+fi
+```
+
+### Step 6: Create NEW GitHub Repository
+
+**IMPORTANT**: This creates a completely NEW repository, NOT related to the template.
+
+```bash
+# Create NEW repo via API
 curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
   -H "Accept: application/vnd.github+json" \
   -d '{"name":"{{REPO_NAME}}","description":"{{DESCRIPTION}}","private":false}' \
   https://api.github.com/user/repos
 
-# Add remote and push
-git remote add origin https://github.com/fearovex/{{REPO_NAME}}.git
+# Add remote (NEW repo, not template)
+git remote add origin https://github.com/{{GITHUB_USER}}/{{REPO_NAME}}.git
+
+# Commit everything (code + docs)
 git add .
-git commit -m "Initial commit from claude-code-template"
+git commit -m "Initial commit: {{PROJECT_NAME}}
+
+Created with claude-code-template
+Tech stack: {{TECH_STACK}}
+"
+
+# Push to NEW repository
 git push -u origin main
 ```
 
-### Step 6: Final Setup
+The new repository will contain:
+- `/docs/` - Requirements and architecture (from /define-project)
+- `/src/` or `/app/` - Code structure (from framework init)
+- `/.claude/` - Claude Code configuration
+- `/CLAUDE.md` - Project memory
+
+### Step 7: Final Setup
 
 1. Create `.env.example` with required environment variables
 2. Update `.gitignore` for the specific tech stack
 3. Install dependencies
 4. Verify the project runs
 
-### Step 7: Summary
+### Step 8: Summary
 
 Present a summary to the user:
 
 ```
-✅ Project Created: {{PROJECT_NAME}}
+✅ NEW Repository Created: {{PROJECT_NAME}}
 
 📁 Location: {{PROJECT_PATH}}
-🔗 Repository: https://github.com/fearovex/{{REPO_NAME}}
+🔗 Repository: https://github.com/{{GITHUB_USER}}/{{REPO_NAME}}
 🛠️ Tech Stack: {{FRAMEWORK}} + {{LANGUAGE}}
+
+📂 Project Structure:
+├── docs/                    # From /define-project
+│   ├── requirements/        # PRD document
+│   ├── architecture/        # Technical specs
+│   └── planning/            # User stories & activities
+├── src/ (or app/)           # Application code
+├── .claude/                 # Claude Code config
+└── CLAUDE.md                # Project memory
 
 📋 Next Steps:
 1. cd {{PROJECT_PATH}}
 2. Open in your editor
 3. Run: {{DEV_COMMAND}}
+4. Start implementing from docs/planning/activities.md
 
 🚀 Available Commands:
 - {{DEV_COMMAND}} - Start development
 - {{BUILD_COMMAND}} - Build for production
 - {{TEST_COMMAND}} - Run tests
 ```
+
+**Note**: This is a NEW repository. The template (claude-code-template) remains unchanged.
 
 ## Example Interaction
 
