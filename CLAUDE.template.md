@@ -31,6 +31,7 @@
     │   └── claude-code-expert/
     │       └── SKILL.md         # Claude Code expert skill
     ├── commands/
+    │   ├── new-project.md       # /new-project command
     │   ├── setup-claude.md      # /setup-claude command
     │   ├── create-skill.md      # /create-skill command
     │   └── audit-claude-config.md # /audit-claude-config command
@@ -96,6 +97,7 @@ This project includes a Claude Code expert skill at `.claude/skills/claude-code-
 
 | Command | Description |
 |---------|-------------|
+| `/new-project [name]` | Create a new project from the template |
 | `/setup-claude` | Analyze project and generate Claude Code configuration |
 | `/create-skill [topic]` | Create a new skill on specified topic |
 | `/audit-claude-config` | Audit current Claude Code configuration |

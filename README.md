@@ -12,6 +12,7 @@ Template repository with pre-configured Claude Code setup for AI-assisted develo
 └── .claude/
     ├── settings.json      # Hooks configuration
     ├── commands/          # Custom slash commands
+    │   ├── new-project.md       # 🚀 Create new projects
     │   ├── setup-claude.md
     │   ├── create-skill.md
     │   └── audit-claude-config.md
@@ -27,7 +28,28 @@ Template repository with pre-configured Claude Code setup for AI-assisted develo
 
 ## Quick Start
 
-### Option 1: Use as GitHub Template
+### Option 1: Use `/new-project` Command (Recommended)
+
+If you already have the template cloned or the global skill installed:
+
+```bash
+claude
+```
+
+Then in Claude Code:
+```
+/new-project my-awesome-app
+```
+
+Claude will:
+1. Ask for project details (description, tech stack)
+2. Clone the template to a new directory
+3. Initialize the framework (Next.js, Vite, Express, etc.)
+4. Update CLAUDE.md with your project info
+5. Create GitHub repository (optional)
+6. Push initial commit
+
+### Option 2: Use as GitHub Template
 
 1. Click **"Use this template"** → **"Create a new repository"**
 2. Clone your new repository
@@ -35,7 +57,7 @@ Template repository with pre-configured Claude Code setup for AI-assisted develo
 4. Update placeholders in `CLAUDE.md`
 5. Start Claude Code: `claude`
 
-### Option 2: Manual Clone
+### Option 3: Manual Clone
 
 ```bash
 # Clone and rename
@@ -90,6 +112,7 @@ source ~/.bashrc
 
 | Command | Description |
 |---------|-------------|
+| `/new-project [name]` | **Create a new project from template** |
 | `/setup-claude` | Analyze project and update CLAUDE.md |
 | `/create-skill [topic]` | Create a new skill |
 | `/audit-claude-config` | Audit Claude Code configuration |
