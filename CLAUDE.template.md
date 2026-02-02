@@ -97,6 +97,7 @@ This project includes a Claude Code expert skill at `.claude/skills/claude-code-
 
 | Command | Description |
 |---------|-------------|
+| `/define-project [name]` | **Define requirements, architecture and specs** |
 | `/new-project [name]` | Create a new project from the template |
 | `/setup-claude` | Analyze project and generate Claude Code configuration |
 | `/create-skill [topic]` | Create a new skill on specified topic |

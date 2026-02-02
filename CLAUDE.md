@@ -23,10 +23,14 @@ alhurg_turismo/
     │   └── claude-code-expert/
     │       └── SKILL.md         # Claude Code expert skill
     ├── commands/
+    │   ├── define-project.md    # /define-project command
     │   ├── new-project.md       # /new-project command
     │   ├── setup-claude.md      # /setup-claude command
     │   ├── create-skill.md      # /create-skill command
     │   └── audit-claude-config.md # /audit-claude-config command
+    ├── skills/
+    │   ├── claude-code-expert/  # Claude Code expert skill
+    │   └── requirements-architect/ # Requirements & architecture skill
     └── hooks/
         ├── protect-branch.js    # Prevents edits on main/master
         ├── validate-command.js  # Blocks dangerous commands
@@ -36,18 +40,28 @@ alhurg_turismo/
 
 ## Available Skills
 
-This project includes a Claude Code expert skill at `.claude/skills/claude-code-expert/SKILL.md` that provides guidance on:
+### Claude Code Expert
+Location: `.claude/skills/claude-code-expert/SKILL.md`
 - CLAUDE.md configuration
 - Skills creation and management
 - Custom commands
 - Hooks and automation
 - MCP server integration
-- Project architecture for AI-assisted development
+
+### Requirements Architect
+Location: `.claude/skills/requirements-architect/SKILL.md`
+- Requirements engineering (IEEE 830, User Stories)
+- Software architecture design
+- Technical specifications
+- Technology stack selection (Frontend, Backend, Mobile)
+- Database design and API design
+- Activities breakdown for implementation
 
 ## Custom Commands
 
 | Command | Description |
 |---------|-------------|
+| `/define-project [name]` | **Define requirements, architecture and specs** |
 | `/new-project [name]` | Create a new project from the template |
 | `/setup-claude` | Analyze project and generate Claude Code configuration |
 | `/create-skill [topic]` | Create a new skill on specified topic |

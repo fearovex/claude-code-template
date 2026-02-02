@@ -22,8 +22,10 @@ Template repository with pre-configured Claude Code setup for AI-assisted develo
     │   ├── enrich-context.js
     │   └── on-task-complete.js
     └── skills/
-        └── claude-code-expert/
-            └── SKILL.md
+        ├── claude-code-expert/
+        │   └── SKILL.md
+        └── requirements-architect/
+            └── SKILL.md         # 🏗️ Requirements & Architecture
 ```
 
 ## Quick Start
@@ -112,7 +114,8 @@ source ~/.bashrc
 
 | Command | Description |
 |---------|-------------|
-| `/new-project [name]` | **Create a new project from template** |
+| `/define-project [name]` | **Define requirements, architecture & specs** |
+| `/new-project [name]` | Create a new project from template |
 | `/setup-claude` | Analyze project and update CLAUDE.md |
 | `/create-skill [topic]` | Create a new skill |
 | `/audit-claude-config` | Audit Claude Code configuration |
