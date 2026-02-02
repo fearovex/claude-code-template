@@ -1,0 +1,90 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": {
+          "tools": ["Edit", "Write"]
+        },
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/protect-branch.js",
+            "description": "Prevent edits on main/master branch"
+          }
+        ]
+      },
+      {
+        "matcher": {
+          "tools": ["Bash"]
+        },
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/validate-command.js",
+            "description": "Validate dangerous commands"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": {
+          "tools": ["Edit", "Write"]
+        },
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx prettier --write \"$FILE\" 2>/dev/null || true",
+            "description": "Auto-format edited files"
+          },
+          {
+            "type": "command",
+            "command": "npx eslint --fix \"$FILE\" 2>/dev/null || true",
+            "description": "Auto-fix linting on edited files"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": {},
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/enrich-context.js",
+            "description": "Add additional context to prompt"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": {},
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/on-task-complete.js",
+            "description": "Notify when task finishes"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Edit(**)",
+      "Write(.claude/**)",
+      "Bash(npm run *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)",
+      "Write(.env*)"
+    ]
+  }
+}
